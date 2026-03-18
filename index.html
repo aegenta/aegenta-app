@@ -7,31 +7,50 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { margin:0; background:#000; color:white; font-family:system-ui; overflow:hidden; }
-    .hero { height:100vh; background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2000') center/cover; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; }
-    .glow { animation:glow 6s infinite alternate; }
-    @keyframes glow { from {text-shadow:0 0 20px #00f0ff, 0 0 40px #00f0ff;} to {text-shadow:0 0 40px #a020f0, 0 0 80px #a020f0;} }
-    .A { font-size:clamp(180px,30vw,400px); font-weight:900; line-height:0.8; background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 30px rgba(0,240,255,0.6)) drop-shadow(0 0 60px rgba(160,32,240,0.4)); transition:transform 0.3s; }
-    .A:active { transform:scale(0.92) translateY(8px); filter:drop-shadow(0 20px 40px rgba(0,0,0,0.8)) brightness(1.2); }
-    .btn { margin-top:2rem; padding:1.5rem 4rem; font-size:2rem; font-weight:bold; background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; border-radius:999px; color:black; cursor:pointer; box-shadow:0 0 40px rgba(0,240,255,0.5); transition:all 0.3s; }
-    .btn:hover { transform:scale(1.05); box-shadow:0 0 60px rgba(160,32,240,0.7); }
+    .hero { 
+      height:100vh; 
+      background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.85)), 
+                  url('./hero.jpg') center/cover no-repeat; 
+      display:flex; align-items:center; justify-content:center; text-align:center; position:relative; 
+    }
+    .A { 
+      font-size:clamp(180px,35vw,420px); 
+      font-weight:900; line-height:0.8; 
+      background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); 
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+      filter:drop-shadow(0 0 60px #00f0ff) drop-shadow(0 0 120px #a020f0) drop-shadow(0 0 180px #ff00aa); 
+      transition:all 0.25s cubic-bezier(0.4,0,0.2,1); 
+      cursor:pointer;
+    }
+    .A:active { 
+      transform:scale(0.88) translateY(18px); 
+      filter:drop-shadow(0 40px 80px rgba(0,0,0,0.95)) brightness(1.3); 
+    }
+    .btn { 
+      margin-top:2rem; padding:1.8rem 5rem; font-size:2.2rem; font-weight:bold; 
+      background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; 
+      border-radius:9999px; color:#000; box-shadow:0 0 60px rgba(0,240,255,0.7); 
+      transition:all 0.3s; 
+    }
+    .btn:active { transform:scale(0.95); }
   </style>
 </head>
 <body>
   <div class="hero">
     <div class="relative z-10">
-      <div class="A glow" onclick="document.getElementById('waitlist').style.display='flex'">A</div>
-      <h1 class="text-6xl md:text-9xl font-black mt-4 tracking-tighter bg-gradient-to-r from-cyan-300 via-purple-400 to-pink-400 bg-clip-text text-transparent">AEGENTA</h1>
-      <p class="text-3xl md:text-5xl mt-6 opacity-90">The Agent That Already Knows Your Life</p>
-      <button class="btn" onclick="document.getElementById('waitlist').style.display='flex'">Join Salt Lake City Beta — First 500 Spots</button>
-      <p class="mt-12 text-lg opacity-70">47,892 already waiting • aegenta.app • West Jordan, UT</p>
+      <div class="A" onclick="document.getElementById('waitlist').style.display='flex'">A</div>
+      <h1 class="text-7xl md:text-9xl font-black mt-6 tracking-tighter">AEGENTA</h1>
+      <p class="text-3xl md:text-5xl mt-6 max-w-2xl mx-auto">The Agent That Already Knows Your Life</p>
+      <button onclick="document.getElementById('waitlist').style.display='flex'" class="btn mt-10">Join Salt Lake City Beta — First 500 Spots</button>
+      <p class="mt-12 text-lg opacity-70">47,892 already joined • aegenta.app • West Jordan, UT</p>
     </div>
   </div>
 
   <div id="waitlist" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-    <div class="bg-zinc-900 p-10 rounded-3xl text-center max-w-md mx-4">
-      <h2 class="text-4xl font-bold mb-6">Welcome to AEGENTA, William</h2>
-      <p class="text-xl mb-8">You’re in the first wave of the SLC / West Jordan beta.<br>Check your email in 24 hours for your exclusive invite link.</p>
-      <button onclick="alert('✅ You’re officially #1 on the AEGENTA waitlist! Site is live — share aegenta.app!')" class="bg-gradient-to-r from-cyan-400 to-purple-600 text-white px-12 py-6 rounded-2xl text-2xl font-bold">Claim My Spot</button>
+    <div class="bg-zinc-900 p-10 rounded-3xl text-center max-w-md">
+      <h2 class="text-4xl font-bold">Welcome, William!</h2>
+      <p class="my-6">You’re #1 in the SLC / West Jordan beta.<br>Invite link coming in 24h.</p>
+      <button onclick="alert('✅ AEGENTA is LIVE on aegenta.app! Share it everywhere! 🚀')" class="bg-white text-black px-12 py-6 rounded-2xl text-2xl font-bold">Claim My Spot</button>
     </div>
   </div>
 </body>
