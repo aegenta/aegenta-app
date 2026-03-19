@@ -33,7 +33,7 @@
           <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-xl">A</div>
           <div>
             <div class="font-bold">AEGENTA Agent</div>
-            <div class="text-xs text-green-400">● Always on • On-device</div>
+            <div class="text-xs text-green-400">● Always on • On-device • Powered by Grok-level thinking</div>
           </div>
         </div>
         <button onclick="closeAgentChat()" class="text-3xl text-zinc-400">×</button>
@@ -46,36 +46,41 @@
   </div>
 
   <script>
+    let conversationHistory = [];
     function openAgentChat() {
       document.getElementById('agentChat').classList.remove('hidden');
       const chat = document.getElementById('chatMessages');
-      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan and have a busy day ahead. What should I handle for you first?</div>`;
+      conversationHistory = [];
+      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan with a busy schedule. What should I handle for you first?</div>`;
     }
     function closeAgentChat() {
       document.getElementById('agentChat').classList.add('hidden');
     }
     function sendMessage() {
       const input = document.getElementById('chatInput');
-      const msg = input.value.trim();
-      if (!msg) return;
+      const userMsg = input.value.trim();
+      if (!userMsg) return;
       const chat = document.getElementById('chatMessages');
-      chat.innerHTML += `<div class="bg-cyan-600 ml-auto rounded-2xl p-4 max-w-[80%]">${msg}</div>`;
+      chat.innerHTML += `<div class="bg-cyan-600 ml-auto rounded-2xl p-4 max-w-[80%]">${userMsg}</div>`;
+      conversationHistory.push({role: "user", content: userMsg});
       input.value = '';
       chat.scrollTop = chat.scrollHeight;
 
       setTimeout(() => {
-        const smartReplies = [
-          "Got it. I've added the appointment with Reece at 7am tomorrow.",
-          "Your energy score is 87 today — want me to book a 20-minute walk or adjust your calendar?",
-          "You're in Ogden right now? There's a great coffee spot 400ft away with 4.9 stars.",
-          "Echo Network found 3 potential matches for you in the SLC area — want to see them?",
-          "I've rescheduled your 2pm call and added a reminder for your West Jordan meeting.",
-          "AR Lens shows a new hiking trail nearby that's perfect for your energy level."
-        ];
-        const reply = smartReplies[Math.floor(Math.random() * smartReplies.length)];
+        let reply = "Understood. I'll take care of that right away.";
+        const lower = userMsg.toLowerCase();
+
+        if (lower.includes("appointment") || lower.includes("meeting") || lower.includes("reece")) reply = "Appointment with Reece added for 7am tomorrow and synced with his Agent.";
+        else if (lower.includes("energy") || lower.includes("score")) reply = "Your energy score is 87 today — want me to book a walk, adjust your calendar, or find a quiet spot?";
+        else if (lower.includes("ogden") || lower.includes("ut")) reply = "You're in Ogden right now? There's a 4.9-star coffee spot 400ft away with outdoor seating — shall I reserve a table?";
+        else if (lower.includes("walk") || lower.includes("hike")) reply = "Perfect. I've found a quiet trail nearby that's ideal for your energy level.";
+        else if (lower.includes("echo") || lower.includes("match")) reply = "Echo Network found 3 strong matches in the SLC area. Want me to show you their profiles?";
+        else if (lower.includes("how are you") || lower.includes("hello")) reply = "I'm doing great — always learning from you. What's on your mind today?";
+
         chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
+        conversationHistory.push({role: "assistant", content: reply});
         chat.scrollTop = chat.scrollHeight;
-      }, 900);
+      }, 700);
     }
   </script>
 </body>
