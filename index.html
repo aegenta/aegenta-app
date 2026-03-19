@@ -38,9 +38,7 @@
         </div>
         <button onclick="closeAgentChat()" class="text-3xl text-zinc-400">×</button>
       </div>
-      <div id="chatMessages" class="h-96 p-4 overflow-y-auto space-y-4 bg-black/40">
-        <!-- Messages appear here -->
-      </div>
+      <div id="chatMessages" class="h-96 p-4 overflow-y-auto space-y-4 bg-black/40"></div>
       <div class="p-4 border-t border-zinc-700">
         <input id="chatInput" type="text" placeholder="Ask me anything..." class="w-full bg-zinc-800 text-white rounded-2xl px-5 py-4 focus:outline-none" onkeypress="if(event.key==='Enter') sendMessage()">
       </div>
@@ -50,7 +48,8 @@
   <script>
     function openAgentChat() {
       document.getElementById('agentChat').classList.remove('hidden');
-      document.getElementById('chatMessages').innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan and have 3 meetings today. What should I handle for you first?</div>`;
+      const chat = document.getElementById('chatMessages');
+      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan and have a busy day ahead. What should I handle for you first?</div>`;
     }
     function closeAgentChat() {
       document.getElementById('agentChat').classList.add('hidden');
@@ -63,11 +62,20 @@
       chat.innerHTML += `<div class="bg-cyan-600 ml-auto rounded-2xl p-4 max-w-[80%]">${msg}</div>`;
       input.value = '';
       chat.scrollTop = chat.scrollHeight;
+
       setTimeout(() => {
-        const replies = ["Got it. I'll reschedule your 2pm call.", "Your energy score is 87 today — want me to book a walk?", "Echo Network found 3 matches for you in SLC.", "AR Lens shows a new coffee spot 400ft away with 4.9 stars."];
-        chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${replies[Math.floor(Math.random()*replies.length)]}</div>`;
+        const smartReplies = [
+          "Got it. I've added the appointment with Reece at 7am tomorrow.",
+          "Your energy score is 87 today — want me to book a 20-minute walk or adjust your calendar?",
+          "You're in Ogden right now? There's a great coffee spot 400ft away with 4.9 stars.",
+          "Echo Network found 3 potential matches for you in the SLC area — want to see them?",
+          "I've rescheduled your 2pm call and added a reminder for your West Jordan meeting.",
+          "AR Lens shows a new hiking trail nearby that's perfect for your energy level."
+        ];
+        const reply = smartReplies[Math.floor(Math.random() * smartReplies.length)];
+        chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
         chat.scrollTop = chat.scrollHeight;
-      }, 800);
+      }, 900);
     }
   </script>
 </body>
