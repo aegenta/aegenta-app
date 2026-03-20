@@ -7,21 +7,42 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { margin:0; background:#000; color:white; font-family:system-ui; overflow:hidden; }
-    .hero { height:100vh; background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.85)), url('image.jpg') center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; }
-    .A { font-size:clamp(180px,35vw,420px); font-weight:900; line-height:0.8; background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 80px #00f0ff) drop-shadow(0 0 140px #a020f0) drop-shadow(0 0 200px #ff00aa); transition:all 0.25s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
-    .A:active { transform:scale(0.88) translateY(18px); filter:drop-shadow(0 40px 80px rgba(0,0,0,0.95)) brightness(1.3); }
-    .btn { margin-top:2rem; padding:1.8rem 5rem; font-size:2.2rem; font-weight:bold; background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; border-radius:9999px; color:#000; box-shadow:0 0 60px rgba(0,240,255,0.7); transition:all 0.3s; }
+    .hero { 
+      height:100vh; 
+      background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.85)), 
+                  url('image.jpg') center/cover no-repeat; 
+      display:flex; align-items:center; justify-content:center; text-align:center; position:relative; 
+    }
+    .A { 
+      font-size:clamp(180px,35vw,420px); 
+      font-weight:900; line-height:0.8; 
+      background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); 
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+      filter:drop-shadow(0 0 80px #00f0ff) drop-shadow(0 0 140px #a020f0) drop-shadow(0 0 200px #ff00aa); 
+      transition:all 0.25s cubic-bezier(0.4,0,0.2,1); 
+      cursor:pointer;
+    }
+    .A:active { 
+      transform:scale(0.88) translateY(18px); 
+      filter:drop-shadow(0 40px 80px rgba(0,0,0,0.95)) brightness(1.3); 
+    }
+    .btn { 
+      margin-top:2rem; padding:1.8rem 5rem; font-size:2.2rem; font-weight:bold; 
+      background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; 
+      border-radius:9999px; color:#000; box-shadow:0 0 60px rgba(0,240,255,0.7); 
+      transition:all 0.3s; 
+    }
     .btn:active { transform:scale(0.95); }
   </style>
 </head>
 <body>
   <div class="hero">
     <div class="relative z-10">
-      <div id="aegenta-trigger" class="A" onclick="openAgentChat()">A</div>
+      <div class="A" onclick="openAgentChat()">A</div>
       <h1 class="text-7xl md:text-9xl font-black mt-6 tracking-tighter">AEGENTA</h1>
       <p class="text-3xl md:text-5xl mt-6 max-w-2xl mx-auto">The Agent That Already Knows Your Life</p>
-      <button onclick="openAgentChat()" class="btn mt-10">Join Salt Lake City Beta — First 500 Spots</button>
-      <p class="mt-12 text-lg opacity-70">47,892 already joined • aegenta.app • West Jordan, UT</p>
+      <button onclick="showWaitlist()" class="btn mt-10">Join Salt Lake City Beta — First 500 Spots</button>
+      <p id="joinedCount" class="mt-12 text-lg opacity-70">47,892 already joined • aegenta.app • West Jordan, UT</p>
     </div>
   </div>
 
@@ -33,7 +54,7 @@
           <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-xl">A</div>
           <div>
             <div class="font-bold">AEGENTA Agent</div>
-            <div class="text-xs text-green-400">● Always on • On-device • Powered by Grok</div>
+            <div class="text-xs text-green-400">● Always on • On-device • Grok-level smart</div>
           </div>
         </div>
         <button onclick="closeAgentChat()" class="text-3xl text-zinc-400">×</button>
@@ -45,173 +66,63 @@
     </div>
   </div>
 
+  <!-- Waitlist Modal -->
+  <div id="waitlistModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+    <div class="bg-zinc-900 p-8 rounded-3xl text-center max-w-md w-full mx-4">
+      <h2 class="text-4xl font-bold mb-2">Welcome, William!</h2>
+      <p class="text-xl mb-6">You're #1 in the SLC / West Jordan beta.</p>
+      <input id="emailInput" type="email" placeholder="your@email.com" class="w-full bg-zinc-800 text-white rounded-2xl px-6 py-5 text-lg mb-6 focus:outline-none">
+      <button onclick="claimSpot()" class="w-full bg-gradient-to-r from-cyan-400 to-purple-600 text-black font-bold text-2xl py-6 rounded-3xl">Claim My Spot</button>
+      <p id="successMessage" class="hidden mt-6 text-green-400 text-lg">✅ You're in! Invite link coming in 24h.</p>
+    </div>
+  </div>
+
   <script>
     let history = [];
     function openAgentChat() {
       document.getElementById('agentChat').classList.remove('hidden');
       const chat = document.getElementById('chatMessages');
-      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent — powered by Grok-level thinking. What should I do for you today?</div>`;
+      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan. What should I handle for you today?</div>`;
       history = [];
     }
     function closeAgentChat() {
       document.getElementById('agentChat').classList.add('hidden');
     }
-    async function sendMessage() {
+    function sendMessage() {
       const input = document.getElementById('chatInput');
       const userMsg = input.value.trim();
       if (!userMsg) return;
       const chat = document.getElementById('chatMessages');
       chat.innerHTML += `<div class="bg-cyan-600 ml-auto rounded-2xl p-4 max-w-[80%]">${userMsg}</div>`;
+      history.push({role: "user", content: userMsg});
       input.value = '';
       chat.scrollTop = chat.scrollHeight;
 
-      history.push({role: "user", content: userMsg});
+      setTimeout(() => {
+        let reply = "Got it. I'll take care of that right away.";
+        const lower = userMsg.toLowerCase();
+        if (lower.includes("appointment") || lower.includes("reece") || lower.includes("meeting")) reply = "Appointment with Reece added for 7am tomorrow and synced with his Agent.";
+        else if (lower.includes("energy") || lower.includes("score")) reply = "Your energy score is 87 today — want me to book a walk or find a quiet spot?";
+        else if (lower.includes("ogden") || lower.includes("ut")) reply = "You're in Ogden right now? There's a 4.9-star coffee spot 400ft away — shall I reserve it?";
+        else if (lower.includes("walk") || lower.includes("hike")) reply = "Perfect. I've found a quiet trail in West Jordan that's ideal for your energy level.";
+        else if (lower.includes("echo") || lower.includes("match")) reply = "Echo Network found 3 strong matches in SLC. Want me to show you?";
 
-      const thinking = document.createElement('div');
-      thinking.className = "bg-zinc-800 rounded-2xl p-4 max-w-[80%]";
-      thinking.textContent = "Thinking...";
-      chat.appendChild(thinking);
-      chat.scrollTop = chat.scrollHeight;
+        chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
+        history.push({role: "assistant", content: reply});
+        chat.scrollTop = chat.scrollHeight;
+      }, 700);
+    }
 
-      // Replace with your real xAI API key (free tier available at console.x.ai)
-      const apiKey = "YOUR_XAI_API_KEY_HERE";   // ← CHANGE THIS
-
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "grok-3-beta",
-          messages: [
-            {role: "system", content: "You are AEGENTA, a proactive on-device AI Life OS. You are warm, helpful, funny, and extremely capable. You know the user is William in West Jordan, UT. Always be proactive and suggest helpful actions."},
-            ...history
-          ],
-          temperature: 0.7,
-          max_tokens: 300
-        })
-      });
-
-      const data = await response.json();
-      const reply = data.choices[0].message.content;
-
-      thinking.remove();
-      chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
-      history.push({role: "assistant", content: reply});
-      chat.scrollTop = chat.scrollHeight;
+    function showWaitlist() {
+      document.getElementById('waitlistModal').classList.remove('hidden');
+    }
+    function claimSpot() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) return alert("Please enter your email");
+      document.getElementById('successMessage').classList.remove('hidden');
+      let count = parseInt(document.getElementById('joinedCount').textContent.split(',')[0].replace(/[^0-9]/g,'')) + 1;
+      document.getElementById('joinedCount').innerHTML = `${count.toLocaleString()} already joined • aegenta.app • West Jordan, UT`;
     }
   </script>
-<!-- ==================== AEGENTA CHAT MODAL (Beta v1.0) ==================== -->
-<div id="aegenta-modal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xl">
-  <div class="relative w-full max-w-lg mx-4 bg-gradient-to-br from-slate-950 via-purple-950 to-black rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30">
-    
-    <!-- Nebula header -->
-    <div class="h-20 bg-[radial-gradient(at_center,#7c3aed_0%,transparent_70%)] flex items-center px-6 relative">
-      <div onclick="closeAegentaModal()" class="absolute top-4 right-4 text-white/60 hover:text-white cursor-pointer text-2xl">✕</div>
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-2xl shadow-[0_0_30px_#a855f7] animate-pulse">A</div>
-        <div>
-          <div class="text-white font-bold text-xl tracking-wider">AEGENTA</div>
-          <div class="text-purple-300 text-xs -mt-1">always on • SLC orbit</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chat area -->
-    <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-6 bg-[radial-gradient(#4b0082_0.8px,transparent_1px)] bg-[length:30px_30px] text-white">
-      <!-- Greeting auto-added by JS -->
-    </div>
-
-    <!-- Input -->
-    <div class="p-4 border-t border-purple-500/20 bg-black/60">
-      <div class="flex gap-3">
-        <input id="chat-input" type="text" 
-               class="flex-1 bg-slate-900 border border-purple-500/30 rounded-2xl px-6 py-4 text-white placeholder:text-purple-300 focus:outline-none focus:border-purple-400 text-base"
-               placeholder="Ask me anything... (I'm already in your orbit)">
-        <button onclick="sendMessage()" 
-                class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl shadow-[0_0_20px_#c026d3] hover:scale-110 transition-all">
-          ✨
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Trigger script + mock brain -->
-<script>
-  const userName = "William";
-  const mockResponses = [
-    "Hey William, back in the SLC orbit again? The Wasatch peaks are glowing extra bright tonight — perfect time for a quick Jordan River walk if you're feeling it.",
-    "Quantum entanglement activated. I already know you're in West Jordan beta mode. What's orbiting your mind today?",
-    "The stars just aligned over the Great Salt Lake. Tell me what's on your constellation map and I'll chart the next move.",
-    "Inversion weather incoming tomorrow… but I’ve got the perfect indoor spot in the valley if you want to stay cosmic and cozy.",
-    "William, your energy feels like a new nebula forming. Ready to launch something big this week?"
-  ];
-
-  function openAegentaModal() {
-    document.getElementById('aegenta-modal').classList.remove('hidden');
-    document.getElementById('aegenta-modal').classList.add('flex');
-    const chat = document.getElementById('chat-messages');
-    if (chat.children.length === 0) {
-      chat.innerHTML = `
-        <div class="flex gap-4">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex-shrink-0 flex items-center justify-center text-xl">A</div>
-          <div>
-            <div class="text-purple-300 text-xs mb-1">AEGENTA • ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
-            <div class="bg-slate-900/80 rounded-3xl rounded-tl-none px-6 py-4 max-w-[85%]">
-              Hey ${userName}, the nebula is humming tonight.<br>
-              Back in the SLC / West Jordan orbit? What’s lighting up your sky?
-            </div>
-          </div>
-        </div>`;
-    }
-  }
-
-  function closeAegentaModal() {
-    document.getElementById('aegenta-modal').classList.add('hidden');
-    document.getElementById('aegenta-modal').classList.remove('flex');
-  }
-
-  function addMessage(text, isUser) {
-    const chat = document.getElementById('chat-messages');
-    const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    const bubble = document.createElement('div');
-    bubble.className = isUser ? "flex justify-end" : "flex gap-4";
-    bubble.innerHTML = isUser 
-      ? `<div class="max-w-[80%]"><div class="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-3xl rounded-tr-none px-6 py-4">\( {text}</div><div class="text-purple-300 text-xs mt-1 text-right"> \){time}</div></div>`
-      : `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex-shrink-0 flex items-center justify-center text-xl">A</div><div><div class="text-purple-300 text-xs mb-1">AEGENTA • \( {time}</div><div class="bg-slate-900/80 rounded-3xl rounded-tl-none px-6 py-4 max-w-[85%]"> \){text}</div></div>`;
-    chat.appendChild(bubble);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text) return;
-    addMessage(text, true);
-    input.value = '';
-    const chat = document.getElementById('chat-messages');
-    const typing = document.createElement('div');
-    typing.id = 'typing';
-    typing.className = 'flex gap-4';
-    typing.innerHTML = `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex-shrink-0 flex items-center justify-center text-xl animate-pulse">A</div><div class="bg-slate-900/80 rounded-3xl rounded-tl-none px-6 py-4 text-purple-400">thinking in the nebula...</div>`;
-    chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
-    setTimeout(() => {
-      typing.remove();
-      const response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-      addMessage(response, false);
-    }, 1100);
-  }
-
-  const trigger = document.getElementById('aegenta-trigger');
-  if (trigger) {
-    trigger.style.cursor = 'pointer';
-    trigger.addEventListener('click', openAegentaModal);
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAegentaModal(); });
-</script>
-<!-- ==================== END AEGENTA CHAT MODAL ==================== -->
 </body>
 </html>
