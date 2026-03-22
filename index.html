@@ -94,8 +94,7 @@
       chat.scrollTop = chat.scrollHeight;
 
       // REPLACE WITH YOUR NEW API KEY HERE (after creating a new one)
-      const apiKey = "xai-55JBP5JAJUsUXyvvz1ersZZv5sQo18UyyivGf4zoy1yH9DbRA66mi5xsPtDRi5Inhy3jyPmEFIS5JRsA";  // ← PASTE YOUR NEW KEY HERE
-
+     const apiKey = import.meta.env.VITE_XAI_API_KEY || "fallback-key-for-local-testing"; 
       const response = await fetch("https://api.x.ai/v1/chat/completions", {
         method: "POST",
         headers: {
