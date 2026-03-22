@@ -7,31 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { margin:0; background:#000; color:white; font-family:system-ui; overflow:hidden; }
-    .hero { 
-      height:100vh; 
-      background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.85)), 
-                  url('image.jpg') center/cover no-repeat; 
-      display:flex; align-items:center; justify-content:center; text-align:center; position:relative; 
-    }
-    .A { 
-      font-size:clamp(180px,35vw,420px); 
-      font-weight:900; line-height:0.8; 
-      background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); 
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
-      filter:drop-shadow(0 0 80px #00f0ff) drop-shadow(0 0 140px #a020f0) drop-shadow(0 0 200px #ff00aa); 
-      transition:all 0.25s cubic-bezier(0.4,0,0.2,1); 
-      cursor:pointer;
-    }
-    .A:active { 
-      transform:scale(0.88) translateY(18px); 
-      filter:drop-shadow(0 40px 80px rgba(0,0,0,0.95)) brightness(1.3); 
-    }
-    .btn { 
-      margin-top:2rem; padding:1.8rem 5rem; font-size:2.2rem; font-weight:bold; 
-      background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; 
-      border-radius:9999px; color:#000; box-shadow:0 0 60px rgba(0,240,255,0.7); 
-      transition:all 0.3s; 
-    }
+    .hero { height:100vh; background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.85)), url('image.jpg') center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; }
+    .A { font-size:clamp(180px,35vw,420px); font-weight:900; line-height:0.8; background:linear-gradient(135deg,#00f0ff,#a020f0,#ff00aa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 80px #00f0ff) drop-shadow(0 0 140px #a020f0) drop-shadow(0 0 200px #ff00aa); transition:all 0.25s cubic-bezier(0.4,0,0.2,1); cursor:pointer; }
+    .A:active { transform:scale(0.88) translateY(18px); filter:drop-shadow(0 40px 80px rgba(0,0,0,0.95)) brightness(1.3); }
+    .btn { margin-top:2rem; padding:1.8rem 5rem; font-size:2.2rem; font-weight:bold; background:linear-gradient(135deg,#00f0ff,#a020f0); border:none; border-radius:9999px; color:#000; box-shadow:0 0 60px rgba(0,240,255,0.7); transition:all 0.3s; }
     .btn:active { transform:scale(0.95); }
   </style>
 </head>
@@ -41,12 +20,12 @@
       <div class="A" onclick="openAgentChat()">A</div>
       <h1 class="text-7xl md:text-9xl font-black mt-6 tracking-tighter">AEGENTA</h1>
       <p class="text-3xl md:text-5xl mt-6 max-w-2xl mx-auto">The Agent That Already Knows Your Life</p>
-      <button onclick="showWaitlist()" class="btn mt-10">Join Salt Lake City Beta — First 500 Spots</button>
-      <p id="joinedCount" class="mt-12 text-lg opacity-70">47,892 already joined • aegenta.app • West Jordan, UT</p>
+      <button onclick="openAgentChat()" class="btn mt-10">Join Salt Lake City Beta — First 500 Spots</button>
+      <p class="mt-12 text-lg opacity-70">47,892 already joined • aegenta.app • West Jordan, UT</p>
     </div>
   </div>
 
-  <!-- Agent Chat Modal -->
+  <!-- Grok-Powered Agent Chat -->
   <div id="agentChat" class="hidden fixed inset-0 bg-black/95 flex items-end z-50">
     <div class="bg-zinc-900 w-full max-w-md mx-auto rounded-t-3xl overflow-hidden">
       <div class="p-4 border-b border-zinc-700 flex justify-between items-center">
@@ -54,7 +33,7 @@
           <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-full flex items-center justify-center text-xl">A</div>
           <div>
             <div class="font-bold">AEGENTA Agent</div>
-            <div class="text-xs text-green-400">● Always on • On-device • Grok-level smart</div>
+            <div class="text-xs text-green-400">● Always on • On-device • Powered by Grok</div>
           </div>
         </div>
         <button onclick="closeAgentChat()" class="text-3xl text-zinc-400">×</button>
@@ -66,29 +45,18 @@
     </div>
   </div>
 
-  <!-- Waitlist Modal -->
-  <div id="waitlistModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-    <div class="bg-zinc-900 p-8 rounded-3xl text-center max-w-md w-full mx-4">
-      <h2 class="text-4xl font-bold mb-2">Welcome, William!</h2>
-      <p class="text-xl mb-6">You're #1 in the SLC / West Jordan beta.</p>
-      <input id="emailInput" type="email" placeholder="your@email.com" class="w-full bg-zinc-800 text-white rounded-2xl px-6 py-5 text-lg mb-6 focus:outline-none">
-      <button onclick="claimSpot()" class="w-full bg-gradient-to-r from-cyan-400 to-purple-600 text-black font-bold text-2xl py-6 rounded-3xl">Claim My Spot</button>
-      <p id="successMessage" class="hidden mt-6 text-green-400 text-lg">✅ You're in! Invite link coming in 24h.</p>
-    </div>
-  </div>
-
   <script>
     let history = [];
     function openAgentChat() {
       document.getElementById('agentChat').classList.remove('hidden');
       const chat = document.getElementById('chatMessages');
-      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent. I already know you're in West Jordan. What should I handle for you today?</div>`;
+      chat.innerHTML = `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">Hello William. I'm your AEGENTA Agent — powered by Grok. I already know you're in West Jordan. What should I handle for you today?</div>`;
       history = [];
     }
     function closeAgentChat() {
       document.getElementById('agentChat').classList.add('hidden');
     }
-    function sendMessage() {
+    async function sendMessage() {
       const input = document.getElementById('chatInput');
       const userMsg = input.value.trim();
       if (!userMsg) return;
@@ -98,30 +66,35 @@
       input.value = '';
       chat.scrollTop = chat.scrollHeight;
 
-      setTimeout(() => {
-        let reply = "Got it. I'll take care of that right away.";
-        const lower = userMsg.toLowerCase();
-        if (lower.includes("appointment") || lower.includes("reece") || lower.includes("meeting")) reply = "Appointment with Reece added for 7am tomorrow and synced with his Agent.";
-        else if (lower.includes("energy") || lower.includes("score")) reply = "Your energy score is 87 today — want me to book a walk or find a quiet spot?";
-        else if (lower.includes("ogden") || lower.includes("ut")) reply = "You're in Ogden right now? There's a 4.9-star coffee spot 400ft away — shall I reserve it?";
-        else if (lower.includes("walk") || lower.includes("hike")) reply = "Perfect. I've found a quiet trail in West Jordan that's ideal for your energy level.";
-        else if (lower.includes("echo") || lower.includes("match")) reply = "Echo Network found 3 strong matches in SLC. Want me to show you?";
+      const thinking = document.createElement('div');
+      thinking.className = "bg-zinc-800 rounded-2xl p-4 max-w-[80%]";
+      thinking.textContent = "Thinking...";
+      chat.appendChild(thinking);
+      chat.scrollTop = chat.scrollHeight;
 
-        chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
-        history.push({role: "assistant", content: reply});
-        chat.scrollTop = chat.scrollHeight;
-      }, 700);
-    }
+      const apiKey = "xai-YOUR_KEY_HERE"; // ← REPLACE WITH YOUR REAL KEY
 
-    function showWaitlist() {
-      document.getElementById('waitlistModal').classList.remove('hidden');
-    }
-    function claimSpot() {
-      const email = document.getElementById('emailInput').value.trim();
-      if (!email) return alert("Please enter your email");
-      document.getElementById('successMessage').classList.remove('hidden');
-      let count = parseInt(document.getElementById('joinedCount').textContent.split(',')[0].replace(/[^0-9]/g,'')) + 1;
-      document.getElementById('joinedCount').innerHTML = `${count.toLocaleString()} already joined • aegenta.app • West Jordan, UT`;
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          model: "grok-beta",
+          messages: [
+            {role: "system", content: "You are AEGENTA, a proactive, warm, and extremely capable on-device AI Life OS. You know the user is William in West Jordan, Utah. Always be helpful, proactive, and a little fun."},
+            ...history
+          ],
+          temperature: 0.8,
+          max_tokens: 300
+        })
+      });
+
+      const data = await response.json();
+      const reply = data.choices[0].message.content;
+
+      thinking.remove();
+      chat.innerHTML += `<div class="bg-zinc-800 rounded-2xl p-4 max-w-[80%]">${reply}</div>`;
+      history.push({role: "assistant", content: reply});
+      chat.scrollTop = chat.scrollHeight;
     }
   </script>
 </body>
