@@ -60,13 +60,13 @@
   </div>
 
   <script>
-    // New fresh Supabase credentials
+    // New Supabase credentials
     let supabase;
     try {
       const supabaseUrl = 'https://evzcuunjisrquistckxa.supabase.co';
       const supabaseKey = 'sb_publishable_nJVEIMhCPzCrIXrAQQFkig_AJkyqv8D';
       supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-      console.log('✅ New Supabase project connected');
+      console.log('✅ New Supabase project connected successfully');
     } catch(e) {
       console.error('Supabase init failed (modals still work)', e);
     }
@@ -87,6 +87,7 @@
       if (!userMsg) return;
       const chat = document.getElementById('chatMessages');
       chat.innerHTML += `<div class="bg-cyan-600 ml-auto rounded-2xl p-4 max-w-[80%]">${userMsg}</div>`;
+      history.push({role: "user", content: userMsg});
       input.value = '';
       chat.scrollTop = chat.scrollHeight;
       setTimeout(() => {
