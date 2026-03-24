@@ -60,16 +60,10 @@
   </div>
 
   <script>
-    // New Supabase project
-    let supabase;
-    try {
-      const supabaseUrl = 'https://evzcuunjisrquistckxa.supabase.co';
-      const supabaseKey = 'sb_publishable_nJVEIMhCPzCrIXrAQQFkig_AJkyqv8D';
-      supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-      console.log('✅ New Supabase project connected');
-    } catch(e) {
-      console.error('Supabase init failed', e);
-    }
+    // Your NEW fresh Supabase project
+    const supabaseUrl = 'https://evzcuunjisrquistckxa.supabase.co';
+    const supabaseKey = 'sb_publishable_nJVEIMhCPzCrIXrAQQFkig_AJkyqv8D';
+    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
 
     let history = [];
     function openAgentChat() {
@@ -104,7 +98,6 @@
     }
     async function showWaitlist() {
       document.getElementById('waitlistModal').classList.remove('hidden');
-      if (!supabase) return;
       const { count } = await supabase.from('waitlist').select('*', { count: 'exact', head: true });
       document.getElementById('joinedCount').innerHTML = `${count || 0} already joined • aegenta.app • West Jordan, UT`;
     }
@@ -112,10 +105,6 @@
       const email = document.getElementById('emailInput').value.trim();
       const name = document.getElementById('nameInput').value.trim() || 'Anonymous';
       if (!email) return alert("Please enter your email");
-      if (!supabase) {
-        document.getElementById('successMessage').classList.remove('hidden');
-        return;
-      }
       const { error } = await supabase.from('waitlist').insert({ email, name, location: 'West Jordan, UT' });
       if (error) {
         alert("Error: " + error.message);
