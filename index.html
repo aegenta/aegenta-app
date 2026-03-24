@@ -53,20 +53,20 @@
       <p class="text-xl mb-6">You're #1 in the SLC / West Jordan beta.</p>
       <input id="emailInput" type="email" placeholder="your@email.com" class="w-full bg-zinc-800 text-white rounded-2xl px-6 py-5 text-lg mb-6 focus:outline-none">
       <input id="nameInput" type="text" placeholder="Your name (optional)" class="w-full bg-zinc-800 text-white rounded-2xl px-6 py-5 text-lg mb-6 focus:outline-none">
-      <button onclick="claimSpot()" id="claimBtn" class="w-full bg-gradient-to-r from-cyan-400 to-purple-600 text-black font-bold text-2xl py-6 rounded-3xl">Claim My Spot</button>
+      <button onclick="claimSpot()" class="w-full bg-gradient-to-r from-cyan-400 to-purple-600 text-black font-bold text-2xl py-6 rounded-3xl">Claim My Spot</button>
       <p id="successMessage" class="hidden mt-6 text-green-400 text-lg">✅ You're in! Invite link coming in 24h.</p>
       <p id="errorMessage" class="hidden mt-6 text-red-400 text-lg"></p>
     </div>
   </div>
 
   <script>
-    // Safe Supabase initialization
+    // New fresh Supabase credentials
     let supabase;
     try {
-      const supabaseUrl = 'https://ricweiwscwejfdklhefw.supabase.co';
-      const supabaseKey = 'sb_publishable_yZ1FXNdCZ5SATndFFIGXdg_JaMbGEyK';
+      const supabaseUrl = 'https://evzcuunjisrquistckxa.supabase.co';
+      const supabaseKey = 'sb_publishable_nJVEIMhCPzCrIXrAQQFkig_AJkyqv8D';
       supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-      console.log('✅ Supabase connected');
+      console.log('✅ New Supabase project connected');
     } catch(e) {
       console.error('Supabase init failed (modals still work)', e);
     }
@@ -109,27 +109,20 @@
       document.getElementById('joinedCount').innerHTML = `${count || 0} already joined • aegenta.app • West Jordan, UT`;
     }
     async function claimSpot() {
-      const btn = document.getElementById('claimBtn');
       const email = document.getElementById('emailInput').value.trim();
       const name = document.getElementById('nameInput').value.trim() || 'Anonymous';
       if (!email) return alert("Please enter your email");
-      btn.disabled = true;
-      btn.textContent = 'Saving...';
       if (!supabase) {
         document.getElementById('successMessage').classList.remove('hidden');
-        btn.disabled = false;
-        btn.textContent = 'Claim My Spot';
         return;
       }
-      const { error } = await supabase.from('waitlist').upsert({ email, name, location: 'West Jordan, UT' }, { onConflict: 'email' });
+      const { error } = await supabase.from('waitlist').insert({ email, name, location: 'West Jordan, UT' });
       if (error) {
         alert("Error: " + error.message);
       } else {
         document.getElementById('successMessage').classList.remove('hidden');
         showWaitlist();
       }
-      btn.disabled = false;
-      btn.textContent = 'Claim My Spot';
     }
   </script>
 </body>
